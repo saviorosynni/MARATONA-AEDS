@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+void mostrarDedos(int n) {
+    int dedosEsquerda, dedosDireita;
+
+    // Verificar se o número pode ser representado usando apenas uma das mãos
+    if (n <= 5) {
+        dedosEsquerda = n;
+        dedosDireita = 0;
+    } else {
+        dedosEsquerda = 5;
+        dedosDireita = n - 5;
+    }
+
+    // Mostrar a representação dos dedos
+    printf("Dedos na mão esquerda: ");
+    for (int i = 0; i < dedosEsquerda; i++) {
+        printf("I ");
+    }
+    printf("\n");
+
+    printf("Dedos na mão direita: ");
+    for (int i = 0; i < dedosDireita; i++) {
+        printf("I ");
+    }
+    if (dedosDireita > 0) {
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+    char continuar;
+
+    do {
+        printf("Digite um número (ou 's' para sair): ");
+        if (scanf("%d", &n) != 1) {
+            scanf("%c", &continuar); // Limpar o buffer de entrada
+            if (continuar == 's' || continuar == 'S') {
+                break;
+            }
+        }
+
+        mostrarDedos(n);
+
+        printf("\nDeseja continuar? (s para sim, qualquer outra tecla para sair): ");
+        scanf(" %c", &continuar); // Espaço antes de %c para ignorar espaços em branco
+
+    } while (continuar == 's' || continuar == 'S');
+
+    printf("Programa encerrado.\n");
+
+    return 0;
+}
