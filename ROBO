@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Estrutura para armazenar a posição do robô
+typedef struct {
+    int x;
+    int y;
+} Posicao;
+
+// Função para ler inteiros
+int lerInteiro() {
+    int num;
+    scanf("%d", &num);
+    return num;
+}
+
+// Função para criar a matriz
+int **criarMatriz(int linhas, int colunas) {
+    int **matriz = malloc(linhas * sizeof(int *));
+    for (int i = 0; i < linhas; i++) {
+        matriz[i] = malloc(colunas * sizeof(int));
+    }
+    return matriz;
+}
+
+// Função para ler as cores dos ladrilhos e preencher a matriz
+void preencherMatriz(int **matriz, int linhas, int colunas) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            matriz[i][j] = lerInteiro();
+        }
+    }
+}
+
+// Função para verificar se a próxima posição é válida
+int posicaoValida(Posicao posicao, int **matriz, int linhas, int colunas) {
+    return posicao.x >= 0 && posicao.x < linhas && posicao.y >= 0 && posicao.y < colunas && matriz[posicao.x][posicao.y] == 1;
+}
+
+// Função para mover o robô para a próxima posição na direção atual
+Posicao proximaPosicao(Posicao posicao, char direcao) {
+    if (direcao == 'N') {
+        posicao.x--;
+    } else if (direcao == 'S') {
+        posicao.x++;
+    } else if (direcao == 'L') {
+        posicao.y++;
+    } else if (direcao == 'O') {
+        posicao.y--;
+    }
+    return posicao;
+}
+
+// Função para atualizar a direção do robô para a próxima direção possível
+char proximaDirecao(char direcao) {
+    if (direcao == 'N') {
+        return 'L';
+    } else if (direcao == 'S') {
+        return 'O';
+    } else if (direcao == 'L') {
+        return 'S';
+    } else if (direcao == 'O') {
+        return 'N';
+    }
+    return direcao;
+}
+
+// Função para parar o movimento do robô
+void pararRobo() {
+    printf("O robô parou.\n");
+}
+
+int main() {
+    int L, C, A, B;
+    Posicao posicaoAtual;
+    char direcaoAtual;
+    
+    // Ler as dimensões do salão e a posição inicial do robô
+    L = lerInteiro();
+    C = lerInteiro();
+    A = lerInteiro();
+    B = lerInteiro();
+    
+    // Criar a matriz para armazenar as cores dos ladrilhos
+    int **matriz = criarMatriz(L, C);
+    
+    // Ler as cores dos ladrilhos e preencher a matriz
+    preencherMatriz(matriz, L, C);
+    
+    // Definir as direções possíveis (Norte, Sul, Leste, Oeste)
+    char direcoes[] = {'N', 'S', 'L', 'O'};
+    
+    // Inicializar a posição atual do robô com a posição inicial
+    posicaoAtual.x = A;
+    posicaoAtual.y = B;
+    
+    // Inicializar a direção atual do robô como "Norte"
+    direcaoAtual = 'N';
+    
+    // Enquanto a posição atual for um ladrilho preto
+    while (matriz[posicaoAtual.x][posicaoAtual.y] == 1) {
+        // Mover o robô para a próxima posição na direção atual
+        posicaoAtual = proximaPosicao(posicaoAtual, direcaoAtual);
+        
+        // Verificar se a próxima posição é válida
+        if (posicaoValida(posicaoAtual, matriz, L, C)) {
+            // Atualizar a direção do robô para a próxima direção possível
+            direcaoAtual = proximaDirecao(direcaoAtual);
+        } else {
+            // Parar o movimento do robô
+            pararRobo();
+            break;
+        }
+    }
+    
+    // Imprimir a posição final do robô
+    printf("Posição final do robô: (%d, %d)\n", posicaoAtual.x, posicaoAtual.y);
+    
+    // Liberar a memória alocada para a matriz
+    for (int i = 0; i < L; i++) {
+        free(matriz[i]);
+    }
+    free(matriz);
+    
+    return 0;
+}
