@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+// Função para contar o número de vitórias
+int contarVitorias(char jogos[], int tamanho) {
+    int vitorias = 0;
+    for (int i = 0; i < tamanho; i++) {
+        if (jogos[i] == 'V') {
+            vitorias++;
+        }
+    }
+    return vitorias;
+}
+
+// Função para determinar o grupo do participante
+int determinarGrupo(char jogos[], int tamanho) {
+    int vitorias = contarVitorias(jogos, tamanho);
+    
+    // Determinar o grupo com base no número de vitórias
+    if (vitorias >= 5) {
+        return 1;
+    } else if (vitorias >= 3) {
+        return 2;
+    } else if (vitorias >= 1) {
+        return 3;
+    } else {
+        return -1;
+    }
+}
+
+int main() {
+    char resultados[6];
+    
+    // Ler os resultados dos jogos do participante
+    for (int i = 0; i < 6; i++) {
+        printf("Digite o resultado do jogo %d (V para vitória, D para derrota): ", i + 1);
+        scanf(" %c", &resultados[i]);
+    }
+
+    // Determinar o grupo do participante com base nos resultados dos jogos
+    int grupo = determinarGrupo(resultados, 6);
+
+    // Imprimir o grupo do participante
+    printf("Grupo do participante: %d\n", grupo);
+
+    return 0;
+}
